@@ -1,12 +1,16 @@
 export default async function handler(req, res) {
-    const { id, key } = req.query;
+    const { id } = req.query;
+    
+    // Busca la key en los Headers de la petición (oculta) o en la URL (para la web)
+    const key = req.headers['x-script-key'] || req.query.key;
+
     const userAgent = (req.headers['user-agent'] || '').toLowerCase();
 
     // Detectar si la petición viene de un navegador web (Chrome, Edge, Firefox, etc.)
     const isBrowser = userAgent.includes('mozilla') || userAgent.includes('chrome') || userAgent.includes('safari') || userAgent.includes('edg');
 
     // 1. SI ABREN EL LINK EN EL NAVEGADOR WEB (Muestra pantalla de seguridad)
-    if (isBrowser) {
+    if (isBrowser && !req.query.key) {
         return res.status(200).send(`
             <!DOCTYPE html>
             <html lang="es">
@@ -40,7 +44,7 @@ export default async function handler(req, res) {
         `);
     }
 
-    // 2. SI LA PETICIÓN VIENE DESDE ROBLOX (Ejecuta el loadstring normalmente)
+    // 2. VALIDACIÓN DE PARÁMETROS
     if (!id || !key) {
         return res.status(400).send('-- Error: Faltan parametros (id o key)');
     }
