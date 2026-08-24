@@ -1,52 +1,38 @@
 export default async function handler(req, res) {
     const { id } = req.query;
-    
-    // Busca la key en los Headers de la petición (oculta) o en la URL (para la web)
-    const key = req.headers['x-script-key'] || req.query.key;
-
     const userAgent = (req.headers['user-agent'] || '').toLowerCase();
 
-    // Detectar si la petición viene de un navegador web (Chrome, Edge, Firefox, etc.)
+    // Detectar si lo están abriendo desde un navegador (Chrome, Edge, Firefox, Safari, Mobile Chrome, etc.)
     const isBrowser = userAgent.includes('mozilla') || userAgent.includes('chrome') || userAgent.includes('safari') || userAgent.includes('edg');
 
-    // 1. SI ABREN EL LINK EN EL NAVEGADOR WEB (Muestra pantalla de seguridad)
-    if (isBrowser && !req.query.key) {
-        return res.status(200).send(`
+    // 1. SI LO ABREN EN UN NAVEGADOR: Bloquea el código para que no lo copien
+    if (isBrowser) {
+        return res.status(403).send(`
             <!DOCTYPE html>
             <html lang="es">
             <head>
                 <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Nexus Security System</title>
+                <title>Nexus Security</title>
                 <style>
-                    body { background: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-                    .card { background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; max-width: 400px; width: 90%; border: 1px solid #334155; }
-                    h2 { margin-top: 0; color: #38bdf8; }
+                    body { background: #0f172a; color: #f8fafc; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+                    .card { background: #1e293b; padding: 30px; border-radius: 12px; text-align: center; border: 1px solid #334155; max-width: 400px; }
+                    h2 { color: #ef4444; margin-top: 0; }
                     p { color: #94a3b8; font-size: 14px; }
-                    input { width: 85%; padding: 12px; margin: 15px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff; text-align: center; font-size: 16px; outline: none; }
-                    button { background: #0284c7; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; width: 90%; transition: 0.2s; }
-                    button:hover { background: #0369a1; }
                 </style>
             </head>
             <body>
                 <div class="card">
-                    <h2>🔒 Nexus Security</h2>
-                    <p>El código directo está protegido contra accesos no autorizados. Ingresa la Key válida para consultar el contenido.</p>
-                    <form method="GET" action="/api/get-script">
-                        <input type="hidden" name="id" value="${id || ''}">
-                        <input type="password" name="key" placeholder="Ingresa la Key aquí" required>
-                        <br>
-                        <button type="submit">Verificar y Mostrar</button>
-                    </form>
+                    <h2>🚫 Acceso Denegado</h2>
+                    <p>Este script solo se puede ejecutar directamente dentro de Roblox.</p>
                 </div>
             </body>
             </html>
         `);
     }
 
-    // 2. VALIDACIÓN DE PARÁMETROS
-    if (!id || !key) {
-        return res.status(400).send('-- Error: Faltan parametros (id o key)');
+    // 2. SI VIENE DESDE ROBLOX: Entrega el script limpio inmediatamente
+    if (!id) {
+        return res.status(400).send('-- Error: Falta el parámetro ID');
     }
 
     try {
@@ -54,12 +40,8 @@ export default async function handler(req, res) {
         const response = await fetch(firebaseUrl);
         const data = await response.json();
 
-        if (!data) {
-            return res.status(404).send('-- Error: Script no encontrado');
-        }
-
-        if (data.password !== key) {
-            return res.status(403).send('-- Error: Acceso denegado. Key incorrecta.');
+        if (!data || !data.code) {
+            return res.status(404).send('-- Error: Script no encontrado en Firebase');
         }
 
         res.setHeader('Content-Type', 'text/plain');
