@@ -311,30 +311,70 @@
         let activeScriptData = null;
         let myScriptsCount = 0;
 
-        // Registro local de claves usadas en este dispositivo
-        function registrarLocalKey(key) {
-            if (key === MASTER_KEY) return true;
-            let keysUsadas = JSON.parse(localStorage.getItem('zhub_registered_keys') || "[]");
-            
-            if (!keysUsadas.includes(key)) {
-                if (keysUsadas.length >= KEY_LIMIT_PER_DEVICE) {
-                    return false; // Excedió las 2 claves permitidas
+        // Generador de Huella Digital de Hardware (Independiente del navegador e IP)
+        function getHardwareFingerprint() {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            let rendererInfo = "";
+            if (gl) {
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    rendererInfo = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
                 }
-                keysUsadas.push(key);
-                localStorage.setItem('zhub_registered_keys', JSON.stringify(keysUsadas));
             }
-            return true;
+            const rawString = `${navigator.hardwareConcurrency}-${screen.width}x${screen.height}-${screen.colorDepth}-${rendererInfo}`;
+            
+            // Hash simple para la cadena
+            let hash = 0;
+            for (let i = 0; i < rawString.length; i++) {
+                let char = rawString.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash |= 0;
+            }
+            return "DEV_" + Math.abs(hash);
         }
 
-        window.iniciarSesion = function() {
+        // Verificación global en Firebase
+        async function validarLimiteDispositivoEnFirebase(key) {
+            if (key === MASTER_KEY) return true;
+
+            const deviceId = getHardwareFingerprint();
+            const deviceRef = ref(db, 'devices/' + deviceId);
+            
+            try {
+                const snapshot = await get(deviceRef);
+                let keysRegistradas = [];
+                
+                if (snapshot.exists()) {
+                    keysRegistradas = snapshot.val().keys || [];
+                }
+
+                if (!keysRegistradas.includes(key)) {
+                    if (keysRegistradas.length >= KEY_LIMIT_PER_DEVICE) {
+                        return false; // El dispositivo físico ya usó sus 2 Keys permitidas
+                    }
+                    keysRegistradas.push(key);
+                    await set(deviceRef, { keys: keysRegistradas, updatedAt: Date.now() });
+                }
+                return true;
+            } catch (e) {
+                console.error("Error al verificar dispositivo en Firebase:", e);
+                return true; 
+            }
+        }
+
+        window.iniciarSesion = async function() {
             const inputKey = document.getElementById('login-key-input').value.trim();
             if(!inputKey) {
                 mostrarAlerta('login-alert', 'Escribe tu Key para acceder.', 'error');
                 return;
             }
 
-            if (!registrarLocalKey(inputKey)) {
-                mostrarAlerta('login-alert', `Límite alcanzado: Este dispositivo solo puede registrar máximo ${KEY_LIMIT_PER_DEVICE} Keys/cuentas.`, 'error');
+            mostrarAlerta('login-alert', 'Verificando dispositivo...', 'error');
+
+            const permitido = await validarLimiteDispositivoEnFirebase(inputKey);
+            if (!permitido) {
+                mostrarAlerta('login-alert', `Bloqueo de seguridad: Este equipo/dispositivo ya vinculó el límite de ${KEY_LIMIT_PER_DEVICE} Keys.`, 'error');
                 return;
             }
 
@@ -350,6 +390,7 @@
                 badge.style.color = "#34d399";
             }
 
+            ocultarAlertas();
             cambiarVista('dashboard');
         }
 
