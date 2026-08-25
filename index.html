@@ -41,7 +41,6 @@
             overflow-x: hidden;
         }
 
-        /* Fondo Animado Ultra Mejorado con Orbes Dinámicos */
         .bg-particles {
             position: fixed;
             top: 0;
@@ -106,7 +105,6 @@
             font-size: 1rem;
         }
 
-        /* Barra de Redes Sociales Flotante */
         .social-bar {
             display: flex;
             gap: 12px;
@@ -350,7 +348,6 @@
             box-shadow: 0 0 15px rgba(52, 211, 153, 0.1);
         }
 
-        /* Toast Notificación flotante pro */
         #toast-notif {
             position: fixed;
             bottom: 25px;
@@ -395,7 +392,6 @@
 </head>
 <body>
 
-    <!-- Fondo con orbes flotantes mejorados -->
     <div class="bg-particles">
         <div class="particle"></div>
         <div class="particle"></div>
@@ -404,7 +400,6 @@
         <div class="particle"></div>
     </div>
 
-    <!-- Notificación Toast -->
     <div id="toast-notif">
         <i class="fa-solid fa-circle-check" style="color: var(--success);"></i>
         <span id="toast-text">¡Loadstring copiado al portapapeles!</span>
@@ -416,7 +411,6 @@
             <p>Sube tus scripts de forma segura y profesional</p>
         </header>
 
-        <!-- BARRA DE REDES SOCIALES DIRECTAS (DISCORD & TIKTOK) -->
         <div class="social-bar">
             <a href="https://discord.gg/6yw4xFPE6" target="_blank" class="social-btn discord">
                 <i class="fa-brands fa-discord"></i> Discord Servidor
@@ -426,7 +420,7 @@
             </a>
         </div>
 
-        <!-- VISTA 0: LOGIN CON KEY -->
+        <!-- VISTA 0: LOGIN -->
         <div id="view-login" class="card">
             <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;"><i class="fa-solid fa-key" style="color: var(--accent);"></i> Acceso al Panel</h2>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 22px;">Ingresa tu Key de Creador (Mínimo 8 caracteres) o Master Key.</p>
@@ -441,7 +435,6 @@
                 </div>
             </div>
 
-            <!-- Campo dinámico para PIN -->
             <div class="form-group hidden" id="login-pin-group">
                 <label id="pin-label">PIN de 4 dígitos:</label>
                 <div class="input-wrapper">
@@ -518,7 +511,7 @@
             <button class="btn btn-secondary" onclick="cambiarVista('dashboard')"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</button>
         </div>
 
-        <!-- VISTA 4: ÉXITO / LINKS GENERADOS -->
+        <!-- VISTA 4: ÉXITO -->
         <div id="view-success" class="card hidden" style="text-align: center;">
             <div style="font-size: 3rem; color: var(--success); margin-bottom: 10px;">
                 <i class="fa-solid fa-circle-check"></i>
@@ -535,12 +528,11 @@
         </div>
     </div>
 
-    <!-- Firebase SDK & Módulos Ofuscados con Cifrado Base64 Dinámico -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, child, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Cadenas decodificadas dinámicamente en tiempo de ejecución
         const _0x_enc = [
             "QUl6YVN5QmlFcENVcW1aT1BmQ3R2VFFxQm9ybnFST0NDZUxKNGtn",
             "bG9hZGVyejEuZmlyZWJhc2VhcHAuY29t",
@@ -839,14 +831,25 @@
             }
         };
 
+        /* FUNCIÓN CORREGIDA PARA ELIMINACIÓN DIRECTA EN FIREBASE */
         window.eliminarScriptDeFirebase = async function() {
-            if (!confirm(`¿Seguro que quieres borrar "${_0x_asid}"?`)) return;
+            const scriptIdToDelete = document.getElementById(_0x_a[23]).value.trim() || _0x_asid;
+            
+            if (!scriptIdToDelete) {
+                _0x_maAlert(_0x_a[12], '<i class="fa-solid fa-triangle-exclamation"></i> No se pudo identificar el ID del script.', 'error');
+                return;
+            }
+
+            if (!confirm(`¿Seguro que quieres borrar "${scriptIdToDelete}" de Firebase?`)) return;
+
             try {
-                await remove(ref(_0x_db, _0x_a[10] + _0x_asid));
-                alert("Script eliminado de Firebase.");
+                await set(ref(_0x_db, _0x_a[10] + scriptIdToDelete), null);
+                alert("¡Script eliminado de Firebase correctamente!");
+                _0x_asid = "";
+                _0x_asdat = null;
                 window.cambiarVista('dashboard');
             } catch(_0xe) {
-                _0x_maAlert(_0x_a[12], 'Error al borrar: ' + _0xe.message, 'error');
+                _0x_maAlert(_0x_a[12], 'Error al borrar en Firebase: ' + _0xe.message, 'error');
             }
         };
 
