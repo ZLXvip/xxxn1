@@ -215,7 +215,7 @@
                 <h2>Tus Scripts Guardados</h2>
                 <span id="user-role-badge" class="user-badge">Modo Creador</span>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Administra y crea accesos directos seguros.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Administra y crea accesos directos seguros (Límite: 5 scripts por Key).</p>
             
             <div id="container-scripts">
                 <p style="color: var(--text-muted); text-align: center; padding: 20px;">Cargando base de datos...</p>
@@ -300,20 +300,41 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // ==========================================
-        // CONFIGURACIÓN DE TU MASTER KEY ADMIN
-        // ==========================================
-        const MASTER_KEY = "ZHUB_MASTER_2026"; // TU KEY MAESTRA
+        // CONFIGURACIÓN DE SEGURIDAD
+        const MASTER_KEY = "ZHUB_MASTER_2026";
+        const SCRIPT_LIMIT_PER_KEY = 5;
+        const KEY_LIMIT_PER_DEVICE = 2;
         
         let currentUserKey = "";
         let isMasterAdmin = false;
         let activeScriptId = "";
         let activeScriptData = null;
+        let myScriptsCount = 0;
+
+        // Registro local de claves usadas en este dispositivo
+        function registrarLocalKey(key) {
+            if (key === MASTER_KEY) return true;
+            let keysUsadas = JSON.parse(localStorage.getItem('zhub_registered_keys') || "[]");
+            
+            if (!keysUsadas.includes(key)) {
+                if (keysUsadas.length >= KEY_LIMIT_PER_DEVICE) {
+                    return false; // Excedió las 2 claves permitidas
+                }
+                keysUsadas.push(key);
+                localStorage.setItem('zhub_registered_keys', JSON.stringify(keysUsadas));
+            }
+            return true;
+        }
 
         window.iniciarSesion = function() {
             const inputKey = document.getElementById('login-key-input').value.trim();
             if(!inputKey) {
                 mostrarAlerta('login-alert', 'Escribe tu Key para acceder.', 'error');
+                return;
+            }
+
+            if (!registrarLocalKey(inputKey)) {
+                mostrarAlerta('login-alert', `Límite alcanzado: Este dispositivo solo puede registrar máximo ${KEY_LIMIT_PER_DEVICE} Keys/cuentas.`, 'error');
                 return;
             }
 
@@ -352,6 +373,11 @@
                 document.getElementById('view-dashboard').classList.remove('hidden');
                 cargarScripts();
             } else if(vista === 'create') {
+                if (!isMasterAdmin && myScriptsCount >= SCRIPT_LIMIT_PER_KEY) {
+                    alert(`Has alcanzado el límite máximo de ${SCRIPT_LIMIT_PER_KEY} scripts por Key.`);
+                    cambiarVista('dashboard');
+                    return;
+                }
                 document.getElementById('view-create').classList.remove('hidden');
                 document.getElementById('script-id').value = '';
                 document.getElementById('script-code').value = '';
@@ -386,6 +412,11 @@
         }
 
         window.guardarScriptEnFirebase = async function() {
+            if (!isMasterAdmin && myScriptsCount >= SCRIPT_LIMIT_PER_KEY) {
+                mostrarAlerta('msg-alert', `Alcanzaste el límite de ${SCRIPT_LIMIT_PER_KEY} scripts por Key.`, "error");
+                return;
+            }
+
             const id = document.getElementById('script-id').value.trim();
             const code = document.getElementById('script-code').value.trim();
 
@@ -450,6 +481,7 @@
 
             try {
                 const snapshot = await get(child(ref(db), 'scripts'));
+                myScriptsCount = 0;
                 
                 if (snapshot.exists()) {
                     container.innerHTML = '';
@@ -459,7 +491,10 @@
                     Object.keys(data).forEach(scriptId => {
                         const script = data[scriptId];
                         
-                        // Si eres MASTER ves todo; si eres Creador ves solo los tuyos
+                        if (script.ownerKey === currentUserKey) {
+                            myScriptsCount++;
+                        }
+
                         if (isMasterAdmin || script.ownerKey === currentUserKey) {
                             count++;
                             const itemDiv = document.createElement('div');
@@ -476,7 +511,6 @@
                             `;
                             container.appendChild(itemDiv);
 
-                            // Event listener para enviar datos al editar
                             document.getElementById(`btn-edit-${scriptId}`).onclick = () => abrirEditor(scriptId, script);
                         }
                     });
