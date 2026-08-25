@@ -197,13 +197,13 @@
         <!-- VISTA 0: LOGIN CON KEY (OBLIGATORIO) -->
         <div id="view-login" class="card">
             <h2>Acceso al Panel</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Ingresa tu Key de Creador o Master Key para continuar.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Ingresa tu Key de Creador (Mínimo 8 caracteres) o Master Key.</p>
             
             <div id="login-alert" class="hidden"></div>
 
             <div class="form-group">
                 <label>Key / Contraseña de Acceso:</label>
-                <input type="password" id="login-key-input" placeholder="Escribe tu Key aquí...">
+                <input type="password" id="login-key-input" placeholder="Ejemplo: Zhub_User9821">
             </div>
 
             <button class="btn" onclick="iniciarSesion()">Ingresar al Panel</button>
@@ -304,6 +304,7 @@
         const MASTER_KEY = "ZHUB_MASTER_2026";
         const SCRIPT_LIMIT_PER_KEY = 5;
         const KEY_LIMIT_PER_DEVICE = 2;
+        const MIN_KEY_LENGTH = 8;
         
         let currentUserKey = "";
         let isMasterAdmin = false;
@@ -311,7 +312,7 @@
         let activeScriptData = null;
         let myScriptsCount = 0;
 
-        // Generador de Huella Digital de Hardware (Independiente del navegador e IP)
+        // Generador de Huella Digital de Hardware
         function getHardwareFingerprint() {
             const canvas = document.createElement('canvas');
             const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -324,7 +325,6 @@
             }
             const rawString = `${navigator.hardwareConcurrency}-${screen.width}x${screen.height}-${screen.colorDepth}-${rendererInfo}`;
             
-            // Hash simple para la cadena
             let hash = 0;
             for (let i = 0; i < rawString.length; i++) {
                 let char = rawString.charCodeAt(i);
@@ -334,32 +334,52 @@
             return "DEV_" + Math.abs(hash);
         }
 
-        // Verificación global en Firebase
-        async function validarLimiteDispositivoEnFirebase(key) {
-            if (key === MASTER_KEY) return true;
+        // Sistema para vincular Key única con Dispositivo en Firebase (Claiming System)
+        async function validarYReclamarKeyEnFirebase(key) {
+            if (key === MASTER_KEY) return { ok: true };
+
+            if (key.length < MIN_KEY_LENGTH) {
+                return { ok: false, msg: `La Key debe tener al menos ${MIN_KEY_LENGTH} caracteres para ser segura.` };
+            }
 
             const deviceId = getHardwareFingerprint();
+            const keyRef = ref(db, 'registered_keys/' + key);
             const deviceRef = ref(db, 'devices/' + deviceId);
-            
+
             try {
-                const snapshot = await get(deviceRef);
+                // 1. Validar propiedad de la Key
+                const keySnap = await get(keyRef);
+                if (keySnap.exists()) {
+                    const ownerDevice = keySnap.val().ownerDevice;
+                    if (ownerDevice !== deviceId) {
+                        return { ok: false, msg: "Esta Key pertenece a otro usuario/dispositivo." };
+                    }
+                }
+
+                // 2. Validar límite de Keys por Hardware
+                const devSnap = await get(deviceRef);
                 let keysRegistradas = [];
-                
-                if (snapshot.exists()) {
-                    keysRegistradas = snapshot.val().keys || [];
+                if (devSnap.exists()) {
+                    keysRegistradas = devSnap.val().keys || [];
                 }
 
                 if (!keysRegistradas.includes(key)) {
                     if (keysRegistradas.length >= KEY_LIMIT_PER_DEVICE) {
-                        return false; // El dispositivo físico ya usó sus 2 Keys permitidas
+                        return { ok: false, msg: `Tu equipo ya registró el límite máximo de ${KEY_LIMIT_PER_DEVICE} Keys.` };
                     }
                     keysRegistradas.push(key);
                     await set(deviceRef, { keys: keysRegistradas, updatedAt: Date.now() });
                 }
-                return true;
+
+                // 3. Reclamar la Key si es totalmente nueva
+                if (!keySnap.exists()) {
+                    await set(keyRef, { ownerDevice: deviceId, createdAt: Date.now() });
+                }
+
+                return { ok: true };
             } catch (e) {
-                console.error("Error al verificar dispositivo en Firebase:", e);
-                return true; 
+                console.error("Error al validar Key:", e);
+                return { ok: true }; 
             }
         }
 
@@ -370,11 +390,11 @@
                 return;
             }
 
-            mostrarAlerta('login-alert', 'Verificando dispositivo...', 'error');
+            mostrarAlerta('login-alert', 'Verificando seguridad de la Key...', 'error');
 
-            const permitido = await validarLimiteDispositivoEnFirebase(inputKey);
-            if (!permitido) {
-                mostrarAlerta('login-alert', `Bloqueo de seguridad: Este equipo/dispositivo ya vinculó el límite de ${KEY_LIMIT_PER_DEVICE} Keys.`, 'error');
+            const resultado = await validarYReclamarKeyEnFirebase(inputKey);
+            if (!resultado.ok) {
+                mostrarAlerta('login-alert', resultado.msg, 'error');
                 return;
             }
 
