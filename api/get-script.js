@@ -1,12 +1,13 @@
 export default async function handler(req, res) {
     const { id } = req.query;
     const userAgent = (req.headers['user-agent'] || '').toLowerCase();
+    const accept = (req.headers['accept'] || '').toLowerCase();
 
-    // Detectar si lo están abriendo desde un navegador (Chrome, Edge, Firefox, Safari, Mobile Chrome, etc.)
-    const isBrowser = userAgent.includes('mozilla') || userAgent.includes('chrome') || userAgent.includes('safari') || userAgent.includes('edg');
+    // Detectar si están abriendo la URL en un navegador web real (Chrome, Edge, Safari, etc.)
+    const isBrowserRequest = accept.includes('text/html') || (userAgent.includes('mozilla') && !userAgent.includes('roblox') && !accept.includes('*/*'));
 
-    // 1. SI LO ABREN EN UN NAVEGADOR: Bloquea el código para que no lo copien
-    if (isBrowser) {
+    // 1. SI LO ABREN EN UN NAVEGADOR WEB: Muestra la pantalla de Acceso Denegado
+    if (isBrowserRequest) {
         return res.status(403).send(`
             <!DOCTYPE html>
             <html lang="es">
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
         `);
     }
 
-    // 2. SI VIENE DESDE ROBLOX: Entrega el script limpio inmediatamente
+    // 2. SI VIENE DE ROBLOX (PC o Android con Delta/cualquier ejecutor): Entrega el script
     if (!id) {
         return res.status(400).send('-- Error: Falta el parámetro ID');
     }
