@@ -206,6 +206,12 @@
                 <input type="password" id="login-key-input" placeholder="Ejemplo: Zhub_User9821">
             </div>
 
+            <!-- Campo dinámico para PIN -->
+            <div class="form-group hidden" id="login-pin-group">
+                <label id="pin-label">PIN de 4 dígitos:</label>
+                <input type="password" id="login-pin-input" maxlength="4" placeholder="••••">
+            </div>
+
             <button class="btn" onclick="iniciarSesion()">Ingresar al Panel</button>
         </div>
 
@@ -334,8 +340,13 @@
             return "DEV_" + Math.abs(hash);
         }
 
-        // Sistema para vincular Key única con Dispositivo en Firebase (Claiming System)
-        async function validarYReclamarKeyEnFirebase(key) {
+        // Función auxiliar para errores de PIN
+        function requiresPinError(msg) {
+            return { ok: false, needsPin: true, msg: msg };
+        }
+
+        // Sistema para vincular Key única con Dispositivo y PIN en Firebase
+        async function validarYReclamarKeyEnFirebase(key, pinIngresado = "") {
             if (key === MASTER_KEY) return { ok: true };
 
             if (key.length < MIN_KEY_LENGTH) {
@@ -347,44 +358,62 @@
             const deviceRef = ref(db, 'devices/' + deviceId);
 
             try {
-                // 1. Validar propiedad de la Key
                 const keySnap = await get(keyRef);
+                
                 if (keySnap.exists()) {
-                    const ownerDevice = keySnap.val().ownerDevice;
-                    if (ownerDevice !== deviceId) {
-                        return { ok: false, msg: "Esta Key pertenece a otro usuario/dispositivo." };
+                    const keyData = keySnap.val();
+                    const ownerDevice = keyData.ownerDevice;
+                    const savedPin = keyData.pin;
+
+                    // Si es el dueño original, entra directo
+                    if (ownerDevice === deviceId) {
+                        return { ok: true };
                     }
-                }
 
-                // 2. Validar límite de Keys por Hardware
-                const devSnap = await get(deviceRef);
-                let keysRegistradas = [];
-                if (devSnap.exists()) {
-                    keysRegistradas = devSnap.val().keys || [];
-                }
+                    // Si es otro usuario que le atinó a la key, le pedimos el PIN
+                    if (savedPin) {
+                        if (!pinIngresado || pinIngresado !== savedPin) {
+                            return requiresPinError("Esta Key ya está registrada. Ingresa el PIN de 4 dígitos para acceder.");
+                        }
+                    } else {
+                        return { ok: false, msg: "Esta Key pertenece a otro usuario y no tiene PIN configurado." };
+                    }
+                } else {
+                    // Si la key es NUEVA, aquí es donde obligas a crear el PIN de 4 dígitos
+                    if (!pinIngresado || pinIngresado.length !== 4 || isNaN(pinIngresado)) {
+                        return { ok: false, needsNewPin: true, msg: "Es una Key nueva. Debes crear un PIN de 4 dígitos." };
+                    }
 
-                if (!keysRegistradas.includes(key)) {
+                    // Validar límite de Keys por Hardware antes de crearla
+                    const devSnap = await get(deviceRef);
+                    let keysRegistradas = devSnap.exists() ? (devSnap.val().keys || []) : [];
+
                     if (keysRegistradas.length >= KEY_LIMIT_PER_DEVICE) {
                         return { ok: false, msg: `Tu equipo ya registró el límite máximo de ${KEY_LIMIT_PER_DEVICE} Keys.` };
                     }
+
                     keysRegistradas.push(key);
                     await set(deviceRef, { keys: keysRegistradas, updatedAt: Date.now() });
-                }
 
-                // 3. Reclamar la Key si es totalmente nueva
-                if (!keySnap.exists()) {
-                    await set(keyRef, { ownerDevice: deviceId, createdAt: Date.now() });
+                    // Guardar la key junto con su PIN en Firebase
+                    await set(keyRef, { 
+                        ownerDevice: deviceId, 
+                        pin: pinIngresado, 
+                        createdAt: Date.now() 
+                    });
                 }
 
                 return { ok: true };
             } catch (e) {
                 console.error("Error al validar Key:", e);
-                return { ok: true }; 
+                return { ok: false, msg: "Error de conexión con Firebase." };
             }
         }
 
         window.iniciarSesion = async function() {
             const inputKey = document.getElementById('login-key-input').value.trim();
+            const inputPin = document.getElementById('login-pin-input').value.trim();
+
             if(!inputKey) {
                 mostrarAlerta('login-alert', 'Escribe tu Key para acceder.', 'error');
                 return;
@@ -392,9 +421,22 @@
 
             mostrarAlerta('login-alert', 'Verificando seguridad de la Key...', 'error');
 
-            const resultado = await validarYReclamarKeyEnFirebase(inputKey);
+            const resultado = await validarYReclamarKeyEnFirebase(inputKey, inputPin);
+            
             if (!resultado.ok) {
                 mostrarAlerta('login-alert', resultado.msg, 'error');
+                
+                // Mostrar el campo de PIN si se requiere (nuevo PIN o PIN existente)
+                if (resultado.needsNewPin || resultado.needsPin) {
+                    document.getElementById('login-pin-group').classList.remove('hidden');
+                    if (resultado.needsNewPin) {
+                        document.getElementById('pin-label').innerText = "Crea un PIN de 4 dígitos:";
+                        document.getElementById('login-pin-input').placeholder = "Ej. 1234";
+                    } else {
+                        document.getElementById('pin-label').innerText = "Ingresa el PIN de 4 dígitos:";
+                        document.getElementById('login-pin-input').placeholder = "••••";
+                    }
+                }
                 return;
             }
 
@@ -411,6 +453,8 @@
             }
 
             ocultarAlertas();
+            document.getElementById('login-pin-group').classList.add('hidden');
+            document.getElementById('login-pin-input').value = "";
             cambiarVista('dashboard');
         }
 
@@ -418,6 +462,8 @@
             currentUserKey = "";
             isMasterAdmin = false;
             document.getElementById('login-key-input').value = "";
+            document.getElementById('login-pin-input').value = "";
+            document.getElementById('login-pin-group').classList.add('hidden');
             cambiarVista('login');
         }
 
