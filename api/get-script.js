@@ -1,8 +1,14 @@
 export default async function handler(req, res) {
     const { id } = req.query;
+    const accept = (req.headers['accept'] || '').toLowerCase();
 
-    // Forzar a que la respuesta SIEMPRE sea texto plano (código Lua puro)
+    // La respuesta SIEMPRE será texto plano para no congelar Roblox
     res.setHeader('Content-Type', 'text/plain');
+
+    // Si la petición viene de un navegador web (pide text/html), bloquea con texto simple
+    if (accept.includes('text/html')) {
+        return res.status(403).send('-- Acceso Denegado: Este script solo se puede ejecutar dentro de Roblox.');
+    }
 
     if (!id) {
         return res.status(400).send('-- Error: Falta el parámetro ID');
@@ -17,7 +23,6 @@ export default async function handler(req, res) {
             return res.status(404).send('-- Error: Script no encontrado en Firebase');
         }
 
-        // Retorna exclusivamente el código Luau tal cual está guardado
         return res.status(200).send(data.code);
 
     } catch (error) {
