@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Z Hub - Multi-User Panel & Loadstrings</title>
-    <!-- FontAwesome Icons CDN (Cero emojis) -->
+    <!-- FontAwesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-color: #09090b;
-            --card-bg: rgba(18, 18, 22, 0.88);
+            --card-bg: rgba(18, 18, 22, 0.95);
             --card-border: #27272a;
             --accent: #ef4444;
             --accent-hover: #dc2626;
@@ -41,40 +41,6 @@
             overflow-x: hidden;
         }
 
-        .bg-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            bottom: -150px;
-            background: radial-gradient(circle, rgba(239, 68, 68, 0.22) 0%, rgba(239, 68, 68, 0) 70%);
-            border-radius: 50%;
-            animation: floatUpAndDown 12s infinite ease-in-out;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.1);
-        }
-
-        .particle:nth-child(1) { width: 160px; height: 160px; left: 8%; animation-duration: 10s; animation-delay: 0s; }
-        .particle:nth-child(2) { width: 240px; height: 240px; left: 28%; animation-duration: 15s; animation-delay: 2s; background: radial-gradient(circle, rgba(52, 211, 153, 0.15) 0%, rgba(52, 211, 153, 0) 70%); }
-        .particle:nth-child(3) { width: 120px; height: 120px; left: 58%; animation-duration: 9s; animation-delay: 4s; }
-        .particle:nth-child(4) { width: 280px; height: 280px; left: 78%; animation-duration: 18s; animation-delay: 1s; background: radial-gradient(circle, rgba(88, 101, 242, 0.15) 0%, rgba(88, 101, 242, 0) 70%); }
-        .particle:nth-child(5) { width: 200px; height: 200px; left: 42%; animation-duration: 13s; animation-delay: 3s; }
-
-        @keyframes floatUpAndDown {
-            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-            20% { opacity: 0.8; }
-            50% { transform: translateY(-55vh) translateX(40px) scale(1.15); opacity: 1; }
-            80% { opacity: 0.8; }
-            100% { transform: translateY(-110vh) translateX(-30px) scale(1.3); opacity: 0; }
-        }
-
         .container {
             width: 100%;
             max-width: 750px;
@@ -84,7 +50,7 @@
         header {
             text-align: center;
             margin-bottom: 25px;
-            animation: fadeInDown 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeInDown 0.4s ease;
         }
 
         header h1 {
@@ -109,7 +75,7 @@
             display: flex;
             gap: 12px;
             margin-bottom: 25px;
-            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeInDown 0.5s ease;
         }
 
         .social-btn {
@@ -126,9 +92,8 @@
             justify-content: center;
             gap: 10px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
             text-decoration: none;
-            backdrop-filter: blur(8px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
@@ -136,14 +101,14 @@
             background-color: var(--discord);
             border-color: var(--discord);
             box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
         .social-btn.tiktok:hover {
             background-color: var(--tiktok);
             border-color: var(--tiktok);
             box-shadow: 0 0 20px rgba(255, 0, 80, 0.5);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
         .social-btn i {
@@ -152,19 +117,18 @@
 
         .card {
             background-color: var(--card-bg);
-            backdrop-filter: blur(16px);
             border: 1px solid var(--card-border);
             border-radius: 18px;
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
             margin-bottom: 20px;
-            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.4s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .card:hover {
             border-color: rgba(239, 68, 68, 0.5);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 25px rgba(239, 68, 68, 0.15);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
         }
 
         .hidden {
@@ -181,7 +145,7 @@
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
             margin-top: 15px;
             display: flex;
             align-items: center;
@@ -192,7 +156,7 @@
 
         .btn:hover {
             background-color: var(--accent-hover);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
         }
 
@@ -245,12 +209,12 @@
             color: white;
             font-size: 0.95rem;
             outline: none;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         input:focus, textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2), inset 0 0 10px rgba(239, 68, 68, 0.05);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
         }
 
         input:focus + i, textarea:focus ~ i {
@@ -288,12 +252,12 @@
             align-items: center;
             margin-bottom: 12px;
             gap: 12px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
         }
 
         .script-list-item:hover {
             border-color: rgba(239, 68, 68, 0.4);
-            transform: translateX(6px);
+            transform: translateX(4px);
             background: #1e1e24;
         }
 
@@ -325,7 +289,6 @@
             margin-bottom: 18px;
             font-size: 0.9rem;
             text-align: center;
-            animation: shake 0.4s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -345,7 +308,6 @@
             font-size: 0.8rem;
             font-weight: 700;
             border: 1px solid rgba(52, 211, 153, 0.3);
-            box-shadow: 0 0 15px rgba(52, 211, 153, 0.1);
         }
 
         #toast-notif {
@@ -362,7 +324,7 @@
             align-items: center;
             gap: 10px;
             z-index: 9999;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease;
             transform: translateY(100px);
             opacity: 0;
             font-weight: 600;
@@ -374,31 +336,17 @@
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
         }
     </style>
 </head>
 <body>
-
-    <div class="bg-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
 
     <div id="toast-notif">
         <i class="fa-solid fa-circle-check" style="color: var(--success);"></i>
@@ -408,7 +356,7 @@
     <div class="container">
         <header>
             <h1><i class="fa-solid fa-shield-halved"></i> Z Protector</h1>
-            <p>Sube tus scripts de forma segura y profesional</p>
+            <p>Sube tus scripts de forma segura y rápida</p>
         </header>
 
         <div class="social-bar">
@@ -452,10 +400,10 @@
                 <h2 style="display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-code" style="color: var(--accent);"></i> Tus Scripts Guardados</h2>
                 <span id="user-role-badge" class="user-badge"><i class="fa-solid fa-user-shield"></i> Modo Creador</span>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Administra y crea accesos directos seguros (Límite: 5 scripts por Key).</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Administra tus accesos directos (Límite: 5 scripts por Key).</p>
             
             <div id="container-scripts">
-                <p style="color: var(--text-muted); text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin"></i> Cargando base de datos...</p>
+                <p style="color: var(--text-muted); text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin"></i> Cargando scripts...</p>
             </div>
 
             <button class="btn" onclick="cambiarVista('create')"><i class="fa-solid fa-plus"></i> Crear Nuevo Script / Loader</button>
@@ -465,7 +413,7 @@
         <!-- VISTA 2: CREAR SCRIPT -->
         <div id="view-create" class="card hidden">
             <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;"><i class="fa-solid fa-file-circle-plus" style="color: var(--accent);"></i> Subir Nuevo Script</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">Rellena los datos para generar tu sistema seguro.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">Rellena los datos para generar tu loader.</p>
 
             <div id="msg-alert" class="hidden"></div>
 
@@ -482,14 +430,14 @@
                 <textarea id="script-code" placeholder="print('Hola mundo script aquí...')"></textarea>
             </div>
 
-            <button class="btn" onclick="guardarScriptEnFirebase()"><i class="fa-solid fa-cloud-arrow-up"></i> Guardar en Firebase</button>
+            <button class="btn" onclick="guardarScriptEnFirebase()"><i class="fa-solid fa-cloud-arrow-up"></i> Guardar Script</button>
             <button class="btn btn-secondary" onclick="cambiarVista('dashboard')"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
         </div>
 
         <!-- VISTA 3: EDITAR / ELIMINAR SCRIPT -->
         <div id="view-edit" class="card hidden">
             <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;"><i class="fa-solid fa-pen-to-square" style="color: var(--accent);"></i> Administrar Script</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">Modifica los datos o elimina el script de la base de datos.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">Modifica los datos o elimina el script.</p>
 
             <div id="edit-alert" class="hidden"></div>
 
@@ -516,8 +464,7 @@
             <div style="font-size: 3rem; color: var(--success); margin-bottom: 10px;">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
-            <h2 style="color: var(--success);">¡Script Protegido con Éxito!</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Copiado e integrado con Vercel API.</p>
+            <h2 style="color: var(--success);">¡Script Generado con Éxito!</h2>
 
             <div class="form-group" style="margin-top: 20px; text-align: left;">
                 <label>Link del Loadstring para Roblox:</label>
@@ -541,7 +488,7 @@
             "bG9hZGVyejEuZmlyZWJhc3RvcmFnZS5hcHA=",
             "MzIzMzE3NjgzNjUx",
             "MTozMjMzMTc2ODM2NTE6d2ViOjFmNTkwOThiNTliNDBiMmUwNjk5NzY=",
-            "WkhVQl9NQVNURVJfMjAyNg==",
+            "ZHViX01BU1RFUl8yMDI2",
             "cmVnaXN0ZXJlZF9rZXlzLw==",
             "ZGV2aWNlcy8=",
             "c2NyaXB0cy8=",
@@ -689,7 +636,7 @@
                 }
                 return { ok: true };
             } catch (_0xe) {
-                return { ok: false, msg: "Error de conexión con Firebase." };
+                return { ok: false, msg: "Error de conexión con la base de datos." };
             }
         }
 
@@ -812,7 +759,7 @@
 
                 window.cambiarVista('success');
             } catch (_0xerr) {
-                _0x_maAlert(_0x_a[11], "Error al guardar en Firebase: " + _0xerr.message, "error");
+                _0x_maAlert(_0x_a[11], "Error al guardar el script: " + _0xerr.message, "error");
             }
         };
 
@@ -831,7 +778,6 @@
             }
         };
 
-        /* FUNCIÓN CORREGIDA PARA ELIMINACIÓN DIRECTA EN FIREBASE */
         window.eliminarScriptDeFirebase = async function() {
             const scriptIdToDelete = document.getElementById(_0x_a[23]).value.trim() || _0x_asid;
             
@@ -840,16 +786,16 @@
                 return;
             }
 
-            if (!confirm(`¿Seguro que quieres borrar "${scriptIdToDelete}" de Firebase?`)) return;
+            if (!confirm(`¿Seguro que quieres borrar "${scriptIdToDelete}"?`)) return;
 
             try {
                 await set(ref(_0x_db, _0x_a[10] + scriptIdToDelete), null);
-                alert("¡Script eliminado de Firebase correctamente!");
+                alert("¡Script eliminado correctamente!");
                 _0x_asid = "";
                 _0x_asdat = null;
                 window.cambiarVista('dashboard');
             } catch(_0xe) {
-                _0x_maAlert(_0x_a[12], 'Error al borrar en Firebase: ' + _0xe.message, 'error');
+                _0x_maAlert(_0x_a[12], 'Error al borrar: ' + _0xe.message, 'error');
             }
         };
 
@@ -888,10 +834,10 @@
                         _0xct.innerHTML = '<div style="text-align: center; padding: 30px 0;"><p style="color: var(--text-muted);"><i class="fa-solid fa-folder-open"></i> No tienes ningún script registrado todavía.</p></div>';
                     }
                 } else {
-                    _0xct.innerHTML = '<div style="text-align: center; padding: 30px 0;"><p style="color: var(--text-muted);"><i class="fa-solid fa-folder-open"></i> No hay scripts en la base de datos.</p></div>';
+                    _0xct.innerHTML = '<div style="text-align: center; padding: 30px 0;"><p style="color: var(--text-muted);"><i class="fa-solid fa-folder-open"></i> No hay scripts guardados.</p></div>';
                 }
             } catch (_0xerr) {
-                _0xct.innerHTML = '<p style="color: var(--accent); text-align: center;"><i class="fa-solid fa-triangle-exclamation"></i> Error al cargar datos de Firebase.</p>';
+                _0xct.innerHTML = '<p style="color: var(--accent); text-align: center;"><i class="fa-solid fa-triangle-exclamation"></i> Error al cargar datos.</p>';
             }
         }
     </script>
