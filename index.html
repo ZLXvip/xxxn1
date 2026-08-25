@@ -6,14 +6,13 @@
     <title>Z Hub - Multi-User Panel & Loadstrings</title>
     <style>
         :root {
-            --bg-color: #070709;
-            --card-bg: #0e0e11;
+            --bg-color: #09090b;
+            --card-bg: #121216;
             --accent: #ef4444;
             --accent-hover: #dc2626;
             --text-main: #f4f4f5;
-            --text-muted: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
-            --border-focus: rgba(239, 68, 68, 0.5);
+            --text-muted: #a1a1aa;
+            --border: #27272a;
         }
 
         * {
@@ -47,21 +46,19 @@
             font-size: 2.2rem;
             color: var(--accent);
             letter-spacing: 1px;
-            font-weight: 700;
         }
 
         header p {
             color: var(--text-muted);
             margin-top: 5px;
-            font-size: 0.95rem;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
         }
 
@@ -73,13 +70,13 @@
             background-color: var(--accent);
             color: white;
             border: none;
-            padding: 11px 18px;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
             width: 100%;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s;
             margin-top: 15px;
         }
 
@@ -87,73 +84,62 @@
             background-color: var(--accent-hover);
         }
 
-        .btn:active {
-            transform: scale(0.99);
-        }
-
         .btn-secondary {
-            background-color: #18181b;
-            border: 1px solid var(--border);
+            background-color: #27272a;
             color: var(--text-main);
             margin-top: 10px;
         }
 
         .btn-secondary:hover {
-            background-color: #27272a;
+            background-color: #3f3f46;
         }
 
         .btn-danger {
-            background-color: rgba(127, 29, 29, 0.4);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background-color: #7f1d1d;
             color: #fca5a5;
             margin-top: 10px;
         }
 
         .btn-danger:hover {
-            background-color: rgba(153, 27, 27, 0.6);
+            background-color: #991b1b;
         }
 
         input, textarea {
             width: 100%;
-            padding: 11px 14px;
-            background-color: #050507;
+            padding: 12px;
+            background-color: #09090b;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             color: white;
             margin-top: 8px;
             font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         input:focus, textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--border-focus);
         }
 
         textarea {
             resize: vertical;
-            height: 200px;
+            height: 180px;
             font-family: monospace;
-            font-size: 0.85rem;
-            line-height: 1.4;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 15px;
             text-align: left;
         }
 
         label {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             font-weight: 600;
-            letter-spacing: 0.3px;
         }
 
         .script-list-item {
-            background: #0b0b0e;
-            padding: 14px 16px;
+            background: #18181b;
+            padding: 15px;
             border-radius: 8px;
             border: 1px solid var(--border);
             display: flex;
@@ -161,11 +147,6 @@
             align-items: center;
             margin-bottom: 10px;
             gap: 10px;
-            transition: border-color 0.2s;
-        }
-
-        .script-list-item:hover {
-            border-color: rgba(255, 255, 255, 0.15);
         }
 
         .actions-group {
@@ -174,7 +155,7 @@
         }
 
         .output-box {
-            background: #050507;
+            background: #000;
             padding: 12px;
             border-radius: 6px;
             font-family: monospace;
@@ -182,33 +163,26 @@
             word-break: break-all;
             color: #34d399;
             margin-top: 8px;
-            border: 1px solid var(--border);
+            border: 1px solid #1e293b;
         }
 
         .alert {
-            padding: 10px 14px;
+            padding: 10px;
             border-radius: 6px;
-            margin-bottom: 16px;
+            margin-bottom: 15px;
             font-size: 0.9rem;
             text-align: center;
         }
-        
-        .alert-error { 
-            background: rgba(239, 68, 68, 0.15); 
-            color: #f87171; 
-            border: 1px solid rgba(239, 68, 68, 0.3); 
-        }
-
+        .alert-error { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
         .user-badge {
             display: inline-block;
-            background: #18181b;
-            border: 1px solid var(--border);
+            background: #27272a;
             color: #34d399;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -217,13 +191,13 @@
     <div class="container">
         <header>
             <h1>Z Protector</h1>
-            <p>Sube tus scripts de forma segura y optimizada</p>
+            <p>Sube tus scripts Gratis y seguro</p>
         </header>
 
         <!-- VISTA 0: LOGIN CON KEY (OBLIGATORIO) -->
         <div id="view-login" class="card">
-            <h2 style="font-size: 1.3rem; margin-bottom: 5px;">Acceso al Panel</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Ingresa tu Key de Creador (Mínimo 8 caracteres) o Master Key.</p>
+            <h2>Acceso al Panel</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Ingresa tu Key de Creador (Mínimo 8 caracteres) o Master Key.</p>
             
             <div id="login-alert" class="hidden"></div>
 
@@ -243,11 +217,11 @@
 
         <!-- VISTA 1: DASHBOARD -->
         <div id="view-dashboard" class="card hidden">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <h2 style="font-size: 1.3rem;">Tus Scripts Guardados</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Tus Scripts Guardados</h2>
                 <span id="user-role-badge" class="user-badge">Modo Creador</span>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Límite permitido: Máximo 3,000 líneas por script (Máx. 5 scripts por Key).</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Administra y crea accesos directos seguros (Límite: 5 scripts por Key).</p>
             
             <div id="container-scripts">
                 <p style="color: var(--text-muted); text-align: center; padding: 20px;">Cargando base de datos...</p>
@@ -259,8 +233,8 @@
 
         <!-- VISTA 2: CREAR SCRIPT -->
         <div id="view-create" class="card hidden">
-            <h2 style="font-size: 1.3rem; margin-bottom: 5px;">Subir Nuevo Script</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Asegúrate de que tu código no rebase las 3,000 líneas.</p>
+            <h2>Subir Nuevo Script</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Rellena los datos para generar tu sistema seguro.</p>
 
             <div id="msg-alert" class="hidden"></div>
 
@@ -270,7 +244,7 @@
             </div>
 
             <div class="form-group">
-                <label>Código Luau Completo (Máx. 3,000 líneas):</label>
+                <label>Código Luau Completo (Pega tu script aquí):</label>
                 <textarea id="script-code" placeholder="print('Hola mundo script aquí...')"></textarea>
             </div>
 
@@ -280,18 +254,18 @@
 
         <!-- VISTA 3: EDITAR / ELIMINAR SCRIPT -->
         <div id="view-edit" class="card hidden">
-            <h2 style="font-size: 1.3rem; margin-bottom: 5px;">Administrar Script</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Modifica el código o elimina el registro.</p>
+            <h2>Administrar Script</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Modifica los datos o elimina el script de la base de datos.</p>
 
             <div id="edit-alert" class="hidden"></div>
 
             <div class="form-group">
                 <label>ID del Script (No modificable):</label>
-                <input type="text" id="edit-script-id" readonly style="opacity: 0.5; cursor: not-allowed;">
+                <input type="text" id="edit-script-id" readonly style="opacity: 0.6; cursor: not-allowed;">
             </div>
 
             <div class="form-group">
-                <label>Código Luau Completo (Máx. 3,000 líneas):</label>
+                <label>Código Luau Completo:</label>
                 <textarea id="edit-script-code"></textarea>
             </div>
 
@@ -302,11 +276,11 @@
 
         <!-- VISTA 4: ÉXITO / LINKS GENERADOS -->
         <div id="view-success" class="card hidden">
-            <h2 style="color: #34d399; font-size: 1.3rem;">¡Script Protegido con Éxito!</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">Copiado e integrado con tu API segura.</p>
+            <h2 style="color: #34d399;">¡Script Protegido con Éxito!</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Copiado e integrado con Vercel API.</p>
 
             <div class="form-group" style="margin-top: 20px;">
-                <label>Link del Loadstring para Roblox:</label>
+                <label>Link del Loadstring para Roblox (Ejecución limpia):</label>
                 <div class="output-box" id="out-loadstring">Cargando...</div>
             </div>
 
@@ -314,11 +288,12 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (Modular v10) -->
+    <!-- Firebase SDK & Módulos Ofuscados -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, child, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+        /* CONFIGURACIÓN DE FIREBASE (Íntegra y funcional) */
         const firebaseConfig = {
             apiKey: "AIzaSyBiEqCUqmZOPfCtvTQ1BornqROCCeLJ4kg",
             authDomain: "loaderz1.firebaseapp.com",
@@ -329,15 +304,15 @@
             appId: "1:323317683651:web:1f59098b59b40b2e069976"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        const _zApp = initializeApp(firebaseConfig);
+        const db = getDatabase(_zApp);
 
-        // CONFIGURACIÓN DE SEGURIDAD Y LÍMITES
-        const MASTER_KEY = "ZHUB_MASTER_2026";
+        /* LÓGICA INTERNA PROTEGIDA Y OFUSCADA */
+        const _0x138a = ["ZHUB_MASTER_2026", "registered_keys/", "devices/", "scripts/", "msg-alert", "edit-alert", "login-alert"];
+        const MASTER_KEY = _0x138a[0];
         const SCRIPT_LIMIT_PER_KEY = 5;
         const KEY_LIMIT_PER_DEVICE = 2;
         const MIN_KEY_LENGTH = 8;
-        const MAX_SCRIPT_LINES = 3000; // Límite estricto de líneas
         
         let currentUserKey = "";
         let isMasterAdmin = false;
@@ -346,135 +321,103 @@
         let myScriptsCount = 0;
 
         function getHardwareFingerprint() {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            let rendererInfo = "";
-            if (gl) {
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                if (debugInfo) {
-                    rendererInfo = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+            const _0xc1 = document.createElement('canvas');
+            const _0xc2 = _0xc1.getContext('webgl') || _0xc1.getContext('experimental-webgl');
+            let _0xri = "";
+            if (_0xc2) {
+                const _0xdi = _0xc2.getExtension('WEBGL_debug_renderer_info');
+                if (_0xdi) {
+                    _0xri = _0xc2.getParameter(_0xdi.UNMASKED_RENDERER_WEBGL);
                 }
             }
-            const rawString = `${navigator.hardwareConcurrency}-${screen.width}x${screen.height}-${screen.colorDepth}-${rendererInfo}`;
-            
-            let hash = 0;
-            for (let i = 0; i < rawString.length; i++) {
-                let char = rawString.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash |= 0;
+            const _0xrs = `${navigator.hardwareConcurrency}-${screen.width}x${screen.height}-${screen.colorDepth}-${_0xri}`;
+            let _0xh = 0;
+            for (let _0xi = 0; _0xi < _0xrs.length; _0xi++) {
+                let _0xch = _0xrs.charCodeAt(_0xi);
+                _0xh = ((_0xh << 5) - _0xh) + _0xch;
+                _0xh |= 0;
             }
-            return "DEV_" + Math.abs(hash);
+            return "DEV_" + Math.abs(_0xh);
         }
 
-        function requiresPinError(msg) {
-            return { ok: false, needsPin: true, msg: msg };
+        function requiresPinError(_0xmsg) {
+            return { ok: false, needsPin: true, msg: _0xmsg };
         }
 
-        async function validarYReclamarKeyEnFirebase(key, pinIngresado = "") {
-            if (key === MASTER_KEY) return { ok: true };
-
-            if (key.length < MIN_KEY_LENGTH) {
+        async function validarYReclamarKeyEnFirebase(_0xkey, _0xpin = "") {
+            if (_0xkey === MASTER_KEY) return { ok: true };
+            if (_0xkey.length < MIN_KEY_LENGTH) {
                 return { ok: false, msg: `La Key debe tener al menos ${MIN_KEY_LENGTH} caracteres para ser segura.` };
             }
-
-            const deviceId = getHardwareFingerprint();
-            const keyRef = ref(db, 'registered_keys/' + key);
-            const deviceRef = ref(db, 'devices/' + deviceId);
+            const _0xdev = getHardwareFingerprint();
+            const _0xkRef = ref(db, _0x138a[1] + _0xkey);
+            const _0xdRef = ref(db, _0x138a[2] + _0xdev);
 
             try {
-                const keySnap = await get(keyRef);
-                
-                if (keySnap.exists()) {
-                    const keyData = keySnap.val();
-                    const ownerDevice = keyData.ownerDevice;
-                    const savedPin = keyData.pin;
-
-                    if (ownerDevice === deviceId) {
-                        return { ok: true };
-                    }
-
-                    if (savedPin) {
-                        if (!pinIngresado || pinIngresado !== savedPin) {
+                const _0xsnap = await get(_0xkRef);
+                if (_0xsnap.exists()) {
+                    const _0xdat = _0xsnap.val();
+                    if (_0xdat.ownerDevice === _0xdev) return { ok: true };
+                    if (_0xdat.pin) {
+                        if (!_0xpin || _0xpin !== _0xdat.pin) {
                             return requiresPinError("Esta Key ya está registrada. Ingresa el PIN de 4 dígitos para acceder.");
                         }
                     } else {
                         return { ok: false, msg: "Esta Key pertenece a otro usuario y no tiene PIN configurado." };
                     }
                 } else {
-                    if (!pinIngresado || pinIngresado.length !== 4 || isNaN(pinIngresado)) {
+                    if (!_0xpin || _0xpin.length !== 4 || isNaN(_0xpin)) {
                         return { ok: false, needsNewPin: true, msg: "Es una Key nueva. Debes crear un PIN de 4 dígitos." };
                     }
-
-                    const devSnap = await get(deviceRef);
-                    let keysRegistradas = devSnap.exists() ? (devSnap.val().keys || []) : [];
-
-                    if (keysRegistradas.length >= KEY_LIMIT_PER_DEVICE) {
+                    const _0xdSnap = await get(_0xdRef);
+                    let _0xkeys = _0xdSnap.exists() ? (_0xdSnap.val().keys || []) : [];
+                    if (_0xkeys.length >= KEY_LIMIT_PER_DEVICE) {
                         return { ok: false, msg: `Tu equipo ya registró el límite máximo de ${KEY_LIMIT_PER_DEVICE} Keys.` };
                     }
-
-                    keysRegistradas.push(key);
-                    await set(deviceRef, { keys: keysRegistradas, updatedAt: Date.now() });
-
-                    await set(keyRef, { 
-                        ownerDevice: deviceId, 
-                        pin: pinIngresado, 
-                        createdAt: Date.now() 
-                    });
+                    _0xkeys.push(_0xkey);
+                    await set(_0xdRef, { keys: _0xkeys, updatedAt: Date.now() });
+                    await set(_0xkRef, { ownerDevice: _0xdev, pin: _0xpin, createdAt: Date.now() });
                 }
-
                 return { ok: true };
-            } catch (e) {
-                console.error("Error al validar Key:", e);
+            } catch (_0xe) {
                 return { ok: false, msg: "Error de conexión con Firebase." };
             }
         }
 
         window.iniciarSesion = async function() {
-            const inputKey = document.getElementById('login-key-input').value.trim();
-            const inputPin = document.getElementById('login-pin-input').value.trim();
-
-            if(!inputKey) {
-                mostrarAlerta('login-alert', 'Escribe tu Key para acceder.', 'error');
+            const _0xik = document.getElementById('login-key-input').value.trim();
+            const _0xip = document.getElementById('login-pin-input').value.trim();
+            if (!_0xik) {
+                mostrarAlerta(_0x138a[6], 'Escribe tu Key para acceder.', 'error');
                 return;
             }
-
-            mostrarAlerta('login-alert', 'Verificando seguridad de la Key...', 'error');
-
-            const resultado = await validarYReclamarKeyEnFirebase(inputKey, inputPin);
+            mostrarAlerta(_0x138a[6], 'Verificando seguridad de la Key...', 'error');
+            const _0xres = await validarYReclamarKeyEnFirebase(_0xik, _0xip);
             
-            if (!resultado.ok) {
-                mostrarAlerta('login-alert', resultado.msg, 'error');
-                
-                if (resultado.needsNewPin || resultado.needsPin) {
+            if (!_0xres.ok) {
+                mostrarAlerta(_0x138a[6], _0xres.msg, 'error');
+                if (_0xres.needsNewPin || _0xres.needsPin) {
                     document.getElementById('login-pin-group').classList.remove('hidden');
-                    if (resultado.needsNewPin) {
-                        document.getElementById('pin-label').innerText = "Crea un PIN de 4 dígitos:";
-                        document.getElementById('login-pin-input').placeholder = "Ej. 1234";
-                    } else {
-                        document.getElementById('pin-label').innerText = "Ingresa el PIN de 4 dígitos:";
-                        document.getElementById('login-pin-input').placeholder = "••••";
-                    }
+                    document.getElementById('pin-label').innerText = _0xres.needsNewPin ? "Crea un PIN de 4 dígitos:" : "Ingresa el PIN de 4 dígitos:";
                 }
                 return;
             }
 
-            currentUserKey = inputKey;
-            isMasterAdmin = (inputKey === MASTER_KEY);
-
-            const badge = document.getElementById('user-role-badge');
+            currentUserKey = _0xik;
+            isMasterAdmin = (_0xik === MASTER_KEY);
+            const _0xbd = document.getElementById('user-role-badge');
             if (isMasterAdmin) {
-                badge.innerText = "👑 Master Admin";
-                badge.style.color = "#ef4444";
+                _0xbd.innerText = "👑 Master Admin";
+                _0xbd.style.color = "#ef4444";
             } else {
-                badge.innerText = "👤 Creador: " + currentUserKey;
-                badge.style.color = "#34d399";
+                _0xbd.innerText = "👤 Creador: " + currentUserKey;
+                _0xbd.style.color = "#34d399";
             }
-
             ocultarAlertas();
             document.getElementById('login-pin-group').classList.add('hidden');
             document.getElementById('login-pin-input').value = "";
             cambiarVista('dashboard');
-        }
+        };
 
         window.cerrarSesion = function() {
             currentUserKey = "";
@@ -483,21 +426,18 @@
             document.getElementById('login-pin-input').value = "";
             document.getElementById('login-pin-group').classList.add('hidden');
             cambiarVista('login');
-        }
+        };
 
-        window.cambiarVista = function(vista) {
-            document.getElementById('view-login').classList.add('hidden');
-            document.getElementById('view-dashboard').classList.add('hidden');
-            document.getElementById('view-create').classList.add('hidden');
-            document.getElementById('view-edit').classList.add('hidden');
-            document.getElementById('view-success').classList.add('hidden');
-
-            if(vista === 'login') {
+        window.cambiarVista = function(_0xvis) {
+            ['view-login', 'view-dashboard', 'view-create', 'view-edit', 'view-success'].forEach(_0xid => {
+                document.getElementById(_0xid).classList.add('hidden');
+            });
+            if (_0xvis === 'login') {
                 document.getElementById('view-login').classList.remove('hidden');
-            } else if(vista === 'dashboard') {
+            } else if (_0xvis === 'dashboard') {
                 document.getElementById('view-dashboard').classList.remove('hidden');
                 cargarScripts();
-            } else if(vista === 'create') {
+            } else if (_0xvis === 'create') {
                 if (!isMasterAdmin && myScriptsCount >= SCRIPT_LIMIT_PER_KEY) {
                     alert(`Has alcanzado el límite máximo de ${SCRIPT_LIMIT_PER_KEY} scripts por Key.`);
                     cambiarVista('dashboard');
@@ -507,177 +447,131 @@
                 document.getElementById('script-id').value = '';
                 document.getElementById('script-code').value = '';
                 ocultarAlertas();
-            } else if(vista === 'edit') {
+            } else if (_0xvis === 'edit') {
                 document.getElementById('view-edit').classList.remove('hidden');
                 document.getElementById('edit-script-id').value = activeScriptId;
                 document.getElementById('edit-script-code').value = activeScriptData.code;
                 ocultarAlertas();
-            } else if(vista === 'success') {
+            } else if (_0xvis === 'success') {
                 document.getElementById('view-success').classList.remove('hidden');
             }
-        }
+        };
 
-        function mostrarAlerta(containerId, texto, tipo) {
-            const alertBox = document.getElementById(containerId);
-            alertBox.className = `alert alert-${tipo}`;
-            alertBox.innerText = texto;
-            alertBox.classList.remove('hidden');
+        function mostrarAlerta(_0xcId, _0xtxt, _0xtip) {
+            const _0xab = document.getElementById(_0xcId);
+            _0xab.className = `alert alert-${_0xtip}`;
+            _0xab.innerText = _0xtxt;
+            _0xab.classList.remove('hidden');
         }
 
         function ocultarAlertas() {
-            document.getElementById('login-alert').classList.add('hidden');
-            document.getElementById('msg-alert').classList.add('hidden');
-            document.getElementById('edit-alert').classList.add('hidden');
+            [_0x138a[6], _0x138a[4], _0x138a[5]].forEach(_0xid => document.getElementById(_0xid).classList.add('hidden'));
         }
 
-        window.abrirEditor = function(scriptId, scriptData) {
-            activeScriptId = scriptId;
-            activeScriptData = scriptData;
+        window.abrirEditor = function(_0xsId, _0xsDat) {
+            activeScriptId = _0xsId;
+            activeScriptData = _0xsDat;
             cambiarVista('edit');
-        }
+        };
 
         window.guardarScriptEnFirebase = async function() {
             if (!isMasterAdmin && myScriptsCount >= SCRIPT_LIMIT_PER_KEY) {
-                mostrarAlerta('msg-alert', `Alcanzaste el límite de ${SCRIPT_LIMIT_PER_KEY} scripts por Key.`, "error");
+                mostrarAlerta(_0x138a[4], `Alcanzaste el límite de ${SCRIPT_LIMIT_PER_KEY} scripts por Key.`, "error");
                 return;
             }
-
-            const id = document.getElementById('script-id').value.trim();
-            const code = document.getElementById('script-code').value.trim();
-
-            if(!id || !code) {
-                mostrarAlerta('msg-alert', "Rellena el ID y el Código del script.", "error");
+            const _0xid = document.getElementById('script-id').value.trim();
+            const _0xcode = document.getElementById('script-code').value.trim();
+            if (!_0xid || !_0xcode) {
+                mostrarAlerta(_0x138a[4], "Rellena el ID y el Código del script.", "error");
                 return;
             }
-
-            // Validar límite máximo de 3,000 líneas
-            const lineas = code.split('\n').length;
-            if (lineas > MAX_SCRIPT_LINES) {
-                mostrarAlerta('msg-alert', `El script tiene ${lineas} líneas. El límite máximo permitido es de ${MAX_SCRIPT_LINES} líneas.`, "error");
-                return;
-            }
-
-            const cleanId = id.replace(/[^a-zA-Z0-9_-]/g, "");
-
+            const _0xcId = _0xid.replace(/[^a-zA-Z0-9_-]/g, "");
             try {
-                await set(ref(db, 'scripts/' + cleanId), {
+                await set(ref(db, _0x138a[3] + _0xcId), {
                     ownerKey: currentUserKey,
-                    code: code,
+                    code: _0xcode,
                     createdAt: Date.now()
                 });
-
-                const loadstringCode = `loadstring(game:HttpGet("https://xxxn1.vercel.app/api/get-script?id=${cleanId}"))()`;
-                document.getElementById('out-loadstring').innerText = loadstringCode;
-
+                const _0xurl = `loadstring(game:HttpGet("https://xxxn1.vercel.app/api/get-script?id=${_0xcId}"))()`;
+                document.getElementById('out-loadstring').innerText = _0xurl;
                 cambiarVista('success');
-            } catch (error) {
-                mostrarAlerta('msg-alert', "Error al guardar en Firebase: " + error.message, "error");
+            } catch (_0xerr) {
+                mostrarAlerta(_0x138a[4], "Error al guardar en Firebase: " + _0xerr.message, "error");
             }
-        }
+        };
 
         window.actualizarScriptEnFirebase = async function() {
-            const newCode = document.getElementById('edit-script-code').value.trim();
-
-            if(!newCode) {
-                mostrarAlerta('edit-alert', 'El código no puede estar vacío.', 'error');
+            const _0xnc = document.getElementById('edit-script-code').value.trim();
+            if (!_0xnc) {
+                mostrarAlerta(_0x138a[5], 'El código no puede estar vacío.', 'error');
                 return;
             }
-
-            // Validar límite máximo de 3,000 líneas al editar
-            const lineas = newCode.split('\n').length;
-            if (lineas > MAX_SCRIPT_LINES) {
-                mostrarAlerta('edit-alert', `El script tiene ${lineas} líneas. El límite máximo permitido es de ${MAX_SCRIPT_LINES} líneas.`, "error");
-                return;
-            }
-
             try {
-                await update(ref(db, 'scripts/' + activeScriptId), {
-                    code: newCode
-                });
+                await update(ref(db, _0x138a[3] + activeScriptId), { code: _0xnc });
                 alert("¡Script actualizado correctamente!");
                 cambiarVista('dashboard');
-            } catch(e) {
-                mostrarAlerta('edit-alert', 'Error al actualizar: ' + e.message, 'error');
+            } catch(_0xe) {
+                mostrarAlerta(_0x138a[5], 'Error al actualizar: ' + _0xe.message, 'error');
             }
-        }
+        };
 
         window.eliminarScriptDeFirebase = async function() {
-            const confirmacion = confirm(`¿Seguro que quieres borrar "${activeScriptId}"?`);
-            if(!confirmacion) return;
-
+            if (!confirm(`¿Seguro que quieres borrar "${activeScriptId}"?`)) return;
             try {
-                await remove(ref(db, 'scripts/' + activeScriptId));
+                await remove(ref(db, _0x138a[3] + activeScriptId));
                 alert("Script eliminado de Firebase.");
                 cambiarVista('dashboard');
-            } catch(e) {
-                mostrarAlerta('edit-alert', 'Error al borrar: ' + e.message, 'error');
+            } catch(_0xe) {
+                mostrarAlerta(_0x138a[5], 'Error al borrar: ' + _0xe.message, 'error');
             }
-        }
+        };
 
         async function cargarScripts() {
-            const container = document.getElementById('container-scripts');
-            container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Buscando scripts...</p>';
-
+            const _0xct = document.getElementById('container-scripts');
+            _0xct.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Buscando scripts...</p>';
             try {
-                const snapshot = await get(child(ref(db), 'scripts'));
+                const _0xsnap = await get(child(ref(db), _0x138a[3]));
                 myScriptsCount = 0;
-                
-                if (snapshot.exists()) {
-                    container.innerHTML = '';
-                    const data = snapshot.val();
-                    let count = 0;
-                    
-                    Object.keys(data).forEach(scriptId => {
-                        const script = data[scriptId];
-                        
-                        if (script.ownerKey === currentUserKey) {
-                            myScriptsCount++;
-                        }
-
-                        if (isMasterAdmin || script.ownerKey === currentUserKey) {
-                            count++;
-                            const itemDiv = document.createElement('div');
-                            itemDiv.className = 'script-list-item';
-                            itemDiv.innerHTML = `
+                if (_0xsnap.exists()) {
+                    _0xct.innerHTML = '';
+                    const _0xdat = _0xsnap.val();
+                    let _0xcnt = 0;
+                    Object.keys(_0xdat).forEach(_0xsId => {
+                        const _0xscr = _0xdat[_0xsId];
+                        if (_0xscr.ownerKey === currentUserKey) myScriptsCount++;
+                        if (isMasterAdmin || _0xscr.ownerKey === currentUserKey) {
+                            _0xcnt++;
+                            const _0xdiv = document.createElement('div');
+                            _0xdiv.className = 'script-list-item';
+                            _0xdiv.innerHTML = `
                                 <div>
-                                    <strong style="color: white; font-size: 1rem;">${scriptId}</strong>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted);">Creador: ${script.ownerKey || 'Desconocido'}</p>
+                                    <strong style="color: white; font-size: 1.05rem;">${_0xsId}</strong>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted);">Creador: ${_0xscr.ownerKey || 'Desconocido'}</p>
                                 </div>
                                 <div class="actions-group">
-                                    <button class="btn" style="width: auto; padding: 7px 12px; margin-top:0; font-size:0.85rem;" onclick="copiarLoadstring('${scriptId}')">Copiar</button>
-                                    <button class="btn btn-secondary" style="width: auto; padding: 7px 12px; margin-top:0; font-size:0.85rem;" id="btn-edit-${scriptId}">Gestionar</button>
-                                </div>
-                            `;
-                            container.appendChild(itemDiv);
-
-                            document.getElementById(`btn-edit-${scriptId}`).onclick = () => abrirEditor(scriptId, script);
+                                    <button class="btn" style="width: auto; padding: 8px 12px; margin-top:0;" onclick="copiarLoadstring('${_0xsId}')">Copiar Loadstring</button>
+                                    <button class="btn btn-secondary" style="width: auto; padding: 8px 12px; margin-top:0;" id="btn-edit-${_0xsId}">Editar / Eliminar</button>
+                                </div>`;
+                            _0xct.appendChild(_0xdiv);
+                            document.getElementById(`btn-edit-${_0xsId}`).onclick = () => abrirEditor(_0xsId, _0xscr);
                         }
                     });
-
-                    if(count === 0) {
-                        container.innerHTML = `
-                            <div style="text-align: center; padding: 25px 0;">
-                                <p style="color: var(--text-muted); font-size: 0.9rem;">No tienes ningún script registrado todavía.</p>
-                            </div>
-                        `;
+                    if (_0xcnt === 0) {
+                        _0xct.innerHTML = '<div style="text-align: center; padding: 30px 0;"><p style="color: var(--text-muted);">No tienes ningún script registrado todavía.</p></div>';
                     }
                 } else {
-                    container.innerHTML = `
-                        <div style="text-align: center; padding: 25px 0;">
-                            <p style="color: var(--text-muted); font-size: 0.9rem;">No hay scripts en la base de datos.</p>
-                        </div>
-                    `;
+                    _0xct.innerHTML = '<div style="text-align: center; padding: 30px 0;"><p style="color: var(--text-muted);">No hay scripts en la base de datos.</p></div>';
                 }
-            } catch (error) {
-                container.innerHTML = '<p style="color: var(--accent); text-align: center; font-size: 0.9rem;">Error al cargar datos de Firebase.</p>';
+            } catch (_0xerr) {
+                _0xct.innerHTML = '<p style="color: var(--accent); text-align: center;">Error al cargar datos de Firebase.</p>';
             }
         }
 
-        window.copiarLoadstring = function(scriptId) {
-            const code = `loadstring(game:HttpGet("https://xxxn1.vercel.app/api/get-script?id=${scriptId}"))()`;
-            navigator.clipboard.writeText(code);
+        window.copiarLoadstring = function(_0xsId) {
+            const _0xcode = `loadstring(game:HttpGet("https://xxxn1.vercel.app/api/get-script?id=${_0xsId}"))()`;
+            navigator.clipboard.writeText(_0xcode);
             alert("¡Loadstring copiado al portapapeles!");
-        }
+        };
     </script>
 </body>
 </html>
